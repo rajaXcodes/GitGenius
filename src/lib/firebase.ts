@@ -1,14 +1,15 @@
 import { error } from "console";
 import { initializeApp } from "firebase/app";
 import { getStorage, uploadBytesResumable, ref, getDownloadURL } from "firebase/storage"
+
 const firebaseConfig = {
-    apiKey: "AIzaSyAZCKn770-kfev1UfZT0tSuajiD_RgrepQ",
-    authDomain: "git-genius-b7a2b.firebaseapp.com",
-    projectId: "git-genius-b7a2b",
-    storageBucket: "git-genius-b7a2b.firebasestorage.app",
-    messagingSenderId: "184983608521",
-    appId: "1:184983608521:web:747427216a0e0c9338c118"
-};
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.FIREBASE_APP_ID,
+}
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
