@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-
+import { Document } from "@langchain/core/documents";
 
 const ai = new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY,
@@ -47,3 +47,48 @@ export const aiSummariseCommit = async (diff: string) => {
     const output = response.text || "No summary generated.";
     return output;
 };
+
+export async function summariseCode(doc: Document) {
+    console.log("getting summary for", doc.metadata.source);
+    const code = doc.pageContent.slice(0, 10000);
+    const fileName = doc.metadata.fileName;
+    const systemInstruction =
+        "You are an intelligent senior software engineer who specializes in onboarding junior developers. " +
+        "Your goal is to explain the provided code's purpose and functionality in a friendly, " +
+        "encouraging, and highly professional manner. You must write a well-structured summary using Markdown.";
+
+    // 3. Define the User Query (Context and Data)
+    // Using backticks (`) for template literals to correctly inject variables.
+    const userQuery = `
+                Please provide an explanation for the file: **${fileName}**.
+
+                Focus on the core purpose, main functions, and any important implementation details relevant to a new team member.
+
+                --- CODE START ---
+                ${code}
+                --- CODE END ---
+            `;
+    try {
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: [{ role: "user", parts: [{ text: userQuery }] }],
+            config: {
+                systemInstruction
+            },
+        });
+        if (!response.text) throw new Error("Cannot generate Code summary");
+
+        return response.text;
+    } catch (error) {
+        return ' ';
+    }
+
+}
+export async function generateEmbedding(summary: string) {
+    const response = await ai.models.embedContent({
+        model: 'text-embedding-004',
+        contents: summary
+    });
+
+    return response.embeddings![0]?.values || [];
+}
