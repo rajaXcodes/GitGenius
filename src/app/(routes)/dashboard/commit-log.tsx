@@ -4,12 +4,19 @@ import useProject from "@/hooks/use-projects"
 import { api } from "@/trpc/react"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
-import { ExternalLink } from "lucide-react"
-
+import { ExternalLink, Loader } from "lucide-react"
 const CommitLog = () => {
     const { projectId, project } = useProject()
-    const { data: commits } = api.project.getCommits.useQuery({ projectId })
+    const { data: commits, isLoading } = api.project.getCommits.useQuery({ projectId })
 
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center py-12 text-gray-500 flex-col">
+                <Loader className="animate-spin h-6 w-6 mr-2" />
+                <p className="text-secondary-foreground font-medium mr-2">Loading Commits</p>
+            </div>
+        )
+    }
     if (!commits?.length)
         return (
             <div className="text-center text-gray-500 py-8">
