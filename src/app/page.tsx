@@ -40,10 +40,10 @@ export default function Home() {
       <section className="relative overflow-hidden px-6 py-20 lg:px-8 lg:py-32 bg-white dark:bg-black">
         <div
           className={cn(
-            "absolute inset-0",
-            "[background-size:20px_20px]",
-            "[background-image:radial-gradient(#999_1px,transparent_1px)]",
-            "dark:[background-image:radial-gradient(#404040_1px,transparent_1px)]"
+            `absolute inset-0,
+            [background-size:20px_20px],
+            [background-image:radial-gradient(#999_1px,transparent_1px)],
+           dark:bg-[radial-gradient(#404040_1px,transparent_1px)]`
           )}
           style={{
             transform: `translateY(${scrollY * 0.5}px)`
