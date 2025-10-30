@@ -51,12 +51,14 @@ export function AppSidebar() {
         <Sidebar collapsible="icon" variant="floating">
             <SidebarHeader>
                 <div className="flex items-center gap-2">
-                    <Image
-                        src="/logo.png"
-                        alt="Logo"
-                        width={60}
-                        height={60}
-                    />
+                    <Link href="/">
+                        <Image
+                            src="/logo.png"
+                            alt="Logo"
+                            width={60}
+                            height={60}
+                            className="dark:text-gray-50"
+                        /></Link>
                     <h1 className="text-xl front-bold text-primary/80 truncate">GitGenius</h1>
                 </div>
             </SidebarHeader>

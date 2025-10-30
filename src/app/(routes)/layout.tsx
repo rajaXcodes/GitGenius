@@ -2,7 +2,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { UserButton } from "@clerk/nextjs";
 import type React from "react";
 import { AppSidebar } from "./dashboard/app-sidebar";
-import { Input } from "@/components/ui/input";
+import { ModeToggle } from "../../components/toogleTheme";
 type Props = {
     children: React.ReactNode;
 }
@@ -13,9 +13,10 @@ const SideBarLayout = ({ children }: Props) => {
             {/* App Side bar */}
             <main className="w-full m-2">
                 <SidebarTrigger />
-                <div className="flex items-center gap-2 border-sidebar-border p-2 rounded-lg shadow-sm bg-sidebar-background">
+                <div className="flex items-center justify-between gap-4 border-sidebar-border p-2 rounded-lg shadow-sm bg-sidebar-background">
                     {/* Search Bar */}
                     <div className="ml-auto"></div>
+                    <ModeToggle />
                     <UserButton />
                 </div>
                 <div className="h-4"></div>
