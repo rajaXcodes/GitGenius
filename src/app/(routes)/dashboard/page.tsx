@@ -6,6 +6,7 @@ import Link from "next/link";
 import CommitLog from "./commit-log";
 import AskQuestion from "./ask-question";
 import MeetingCard from "./meeting-card";
+import ArchiveButton from "./archive-button";
 const DashBoardPage = () => {
     const { user } = useUser();
     const { project } = useProject();
@@ -32,7 +33,7 @@ const DashBoardPage = () => {
                 <div className="flex items-center gap-4">
                     Team Member
                     InviteButton
-                    ArchiveButton
+                    <ArchiveButton />
                 </div>
 
             </div>

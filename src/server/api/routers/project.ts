@@ -1,7 +1,9 @@
-import z from "zod";
+import z, { includes } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { pollsCommits } from "@/lib/github";
 import { indexGithubRepo } from "@/lib/github-loader";
+import { issue } from "node_modules/zod/v4/core/util.cjs";
+import { tr } from "date-fns/locale";
 
 export const projectRouter = createTRPCRouter({
     createProject: protectedProcedure.input(
@@ -90,5 +92,37 @@ export const projectRouter = createTRPCRouter({
         })
         return meeting
     }),
+    getMeetings: protectedProcedure.input(z.object({
+        projectId: z.string()
+    })).query(async ({ ctx, input }) => {
+        return await ctx.db.meeting.findMany({
+            where: {
+                projectId: input.projectId
+            },
+            orderBy: {
+                createdAt: 'desc'
+            },
+            include: {
+                issues: true
+            }
+        })
+    }),
+    deleteMeeting: protectedProcedure.input(z.object({
+        meetingId: z.string()
+    })).mutation(async ({ ctx, input }) => {
+        return await ctx.db.meeting.delete({
+            where: { id: input.meetingId }
+        })
+    }),
+    getMeetingById: protectedProcedure.input(z.object({
+        meetingId: z.string()
+    })).query(async ({ ctx, input }) => {
+        return await ctx.db.meeting.findUnique({
+            where: { id: input.meetingId }, include: { issues: true }
+        })
+    }),
+    archiveProject: protectedProcedure.input(z.object({ projectId: z.string() })).mutation(async ({ ctx, input }) => {
+        return await ctx.db.project.update({ where: { id: input.projectId }, data: { deletedAt: new Date() } })
+    })
 
 })

@@ -12,23 +12,18 @@ import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
-
 const MeetingCard = () => {
     const project = useProject()
-    const router = useRouter();
     const processMeeting = useMutation({
         mutationFn: async (data: { meetingUrl: string, meetingId: string, projectId: string }) => {
-
             const { meetingUrl, meetingId, projectId } = data;
-            console.log("Processing meeting", data)
             const response = await axios.post('/api/process-meeting', {
-                meetingUrl,
-                meetingId,
-                projectId
-            })
-            return response.data
+                meetingUrl, meetingId, projectId
+            });
+            return response.data;
         }
     })
+    const router = useRouter();
 
     const [isUploading, setIsUploading] = useState(false);
     const uploadMeeting = api.project.uploadMeeting.useMutation()
@@ -55,7 +50,7 @@ const MeetingCard = () => {
                 setIsUploading(false)
                 return
             }
-            const { url } = await uploadFile(file as File)
+            const { url } = await uploadFile(file as File);
             uploadMeeting.mutate({
                 projectId: project.projectId,
                 meetingUrl: url as string,

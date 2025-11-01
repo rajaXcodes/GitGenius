@@ -350,10 +350,3 @@ export default function Home() {
     </div>
   );
 }
-
-
-// "use client"
-
-// export default function Home() {
-//   return <div>Hii</div>
-// }
