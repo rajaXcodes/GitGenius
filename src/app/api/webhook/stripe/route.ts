@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { db } from "@/server/db";
+import { toast } from "sonner";
 const stripe = new Stripe(process.env.STRIPE_API_KEY!, { apiVersion: '2025-10-29.clover' });
 
 export async function POST(request: NextRequest) {
@@ -36,7 +37,9 @@ export async function POST(request: NextRequest) {
                 }
             }
         })
+        toast.success(`${credits} credits are added successfully`)
         return NextResponse.json({ message: 'Credits added successfully' }, { status: 200 })
     }
+    toast.error(`Payment Failed`);
     return NextResponse.json({ message: 'Failed to add token' }, { status: 403 })
 }
