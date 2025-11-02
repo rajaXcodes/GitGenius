@@ -110,5 +110,3 @@ async function summariseCommit(githubUrl: string, commitHash: string) {
     })
     return await aiSummariseCommit(data) || "";
 }
-
-console.log(await pollsCommits("cmhhulyfv000dle040sfl61ny"));
