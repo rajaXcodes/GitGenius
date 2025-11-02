@@ -83,7 +83,7 @@ const MeetingCard = () => {
                         Create a new meeting
                     </h3>
                     <p className='mt-5 text-center text-sm text-gray-500'>
-                        Analyse your meeting with Dionysus.
+                        Analyse your meeting with GitGenius.
                         {/* <span className='text-gray-400 text-xs'>{" "}(Limit 50 MB)</span> */}
                         <br />
                         Powered by AI
