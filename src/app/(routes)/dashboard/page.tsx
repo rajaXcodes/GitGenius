@@ -6,7 +6,9 @@ import Link from "next/link";
 import CommitLog from "./commit-log";
 import AskQuestion from "./ask-question";
 import MeetingCard from "./meeting-card";
+import InviteButton from "./invite";
 import ArchiveButton from "./archive-button";
+import TeamMembers from "./team-members";
 const DashBoardPage = () => {
     const { user } = useUser();
     const { project } = useProject();
@@ -31,8 +33,8 @@ const DashBoardPage = () => {
                 <div className="mt-4"></div>
                 {/* Side button */}
                 <div className="flex items-center gap-4">
-                    Team Member
-                    InviteButton
+                    <TeamMembers />
+                    <InviteButton />
                     <ArchiveButton />
                 </div>
 

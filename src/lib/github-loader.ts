@@ -78,10 +78,6 @@ export const indexGithubRepo = async (
     );
 };
 
-/**
- * Estimate "credits" (number of files in the repo).
- * This reuses GithubRepoLoader so we don’t make extra API calls.
- */
 export const checkCredits = async (repoUrl: string, githubToken?: string) => {
     const docs = await loadGithubRepo(repoUrl, githubToken);
     return docs.length; // just return number of files
