@@ -142,14 +142,14 @@ export function Navbar() {
           }
         }
 
-        @keyframes spin-slow {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(180deg);
-          }
-        }
+        // @keyframes spin-slow {
+        //   from {
+        //     transform: rotate(0deg);
+        //   }
+        //   to {
+        //     transform: rotate(180deg);
+        //   }
+        // }
 
         .animate-glow {
           animation: glow 2s ease-in-out infinite;
