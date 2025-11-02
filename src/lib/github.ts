@@ -42,33 +42,40 @@ export const getCommmitHashes = async (githubUrl: string): Promise<Response[]> =
 
 export const pollsCommits = async (projectId: string) => {
     //https://github.com/raja/algo-metnor
-    const { project, githubUrl } = await fetchPrjectGithubUrl(projectId);
-    const commitHashes = await getCommmitHashes(githubUrl);
-    const unprocessCommits = await filterUnprocessedCommits(projectId, commitHashes);
-    const summaryResponses = await Promise.allSettled(unprocessCommits.map(commit => {
-        return summariseCommit(githubUrl, commit.commitHash);
-    }))
-    const summaries = summaryResponses.map((response) => {
-        if (response.status === 'fulfilled') {
-            return response.value as string;
-        }
-        return "";
-    })
-    const commit = await db.commit.createMany({
-        data: summaries.map((summary, index) => {
-            console.log(`Processing commit ${index}`);
-            return {
-                projectId: projectId,
-                commitHash: unprocessCommits[index]!.commitHash,
-                commitMessage: unprocessCommits[index]!.commitMessage,
-                commitAuthorName: unprocessCommits[index]!.commitAuthorName,
-                commitAuthorAvatar: unprocessCommits[index]!.commitAuthorAvatar,
-                commitDate: unprocessCommits[index]!.commitDate,
-                summary
+    try {
+        const { project, githubUrl } = await fetchPrjectGithubUrl(projectId);
+        console.log('fetched Project :', project, githubUrl);
+        const commitHashes = await getCommmitHashes(githubUrl);
+        console.log('Processing commitHashes ;', commitHashes.length);
+        const unprocessCommits = await filterUnprocessedCommits(projectId, commitHashes);
+        console.log('Processing unprocessed Commit :', unprocessCommits.length);
+        const summaryResponses = await Promise.allSettled(unprocessCommits.map(commit => {
+            return summariseCommit(githubUrl, commit.commitHash);
+        }))
+        const summaries = summaryResponses.map((response) => {
+            if (response.status === 'fulfilled') {
+                return response.value as string;
             }
+            return "";
         })
-    })
-    return commit;
+        const commit = await db.commit.createMany({
+            data: summaries.map((summary, index) => {
+                console.log(`Processing commit ${index}`);
+                return {
+                    projectId: projectId,
+                    commitHash: unprocessCommits[index]!.commitHash,
+                    commitMessage: unprocessCommits[index]!.commitMessage,
+                    commitAuthorName: unprocessCommits[index]!.commitAuthorName,
+                    commitAuthorAvatar: unprocessCommits[index]!.commitAuthorAvatar,
+                    commitDate: unprocessCommits[index]!.commitDate,
+                    summary
+                }
+            })
+        })
+        return commit;
+    } catch (err) {
+        return { message: "Commit cannot be processed", err };
+    }
 }
 
 export const fetchPrjectGithubUrl = async (projectId: string) => {
@@ -103,3 +110,5 @@ async function summariseCommit(githubUrl: string, commitHash: string) {
     })
     return await aiSummariseCommit(data) || "";
 }
+
+console.log(await pollsCommits("cmhhulyfv000dle040sfl61ny"));
