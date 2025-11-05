@@ -11,35 +11,59 @@ type Props = {
     fileReferences: { fileName: string; sourceCode: string; summary: string; }[];
 }
 
-const CodeRefrence = ({ fileReferences }: Props) => {
+const CodeReferences = ({ fileReferences }: Props) => {
     const [tab, setTab] = useState(fileReferences[0]?.fileName);
+
     useEffect(() => {
         if (fileReferences.length > 0) {
             setTab(fileReferences[0]!.fileName);
         }
     }, [fileReferences]);
+
     if (fileReferences.length === 0) return null
 
     return (
-        <div className='max-w-[70vw]'>
+        <div className='w-full'>
             <Tabs value={tab} onValueChange={setTab}>
-                <div className='overflow-scroll flex gap-1 bg-gray-200  p-1 rounded-md'>
+                <div className='overflow-x-auto flex gap-2 bg-gray-200 p-2 rounded-md mb-4'>
                     {fileReferences.map((file) => (
-                        <Button variant={'outline'} onClick={() => setTab(file.fileName)} key={file.fileName} className={cn(
-                            'p-1 text-sm font-medium  rounded-md transition-colors whitespace-nowrap text-muted-foreground bg-transparent hover:bg-muted',
-                            {
-                                'bg-primary text-primary-foreground': tab === file.fileName,
-                            }
-                        )}>
+                        <Button
+                            variant={'outline'}
+                            onClick={() => setTab(file.fileName)}
+                            key={file.fileName}
+                            size="sm"
+                            className={cn(
+                                'px-3 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap shrink-0',
+                                tab === file.fileName
+                                    ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+                                    : 'text-muted-foreground bg-white hover:bg-gray-100'
+                            )}
+                        >
                             {file.fileName}
                         </Button>
                     ))}
                 </div>
+
                 {fileReferences.map((file) => (
-                    <TabsContent key={file.fileName} value={file.fileName} className='max-h-[40vh] overflow-y-scroll max-w-7xl rounded-md'>
-                        <SyntaxHighlighter language='typescript' style={lucario}>
-                            {file.sourceCode}
-                        </SyntaxHighlighter>
+                    <TabsContent
+                        key={file.fileName}
+                        value={file.fileName}
+                        className='mt-0'
+                    >
+                        <div className='max-h-[400px] overflow-auto rounded-md border'>
+                            <SyntaxHighlighter
+                                language='typescript'
+                                style={lucario}
+                                customStyle={{
+                                    margin: 0,
+                                    borderRadius: '0.375rem',
+                                    fontSize: '0.875rem',
+                                }}
+                                wrapLongLines={true}
+                            >
+                                {file.sourceCode}
+                            </SyntaxHighlighter>
+                        </div>
                     </TabsContent>
                 ))}
             </Tabs>
@@ -47,4 +71,4 @@ const CodeRefrence = ({ fileReferences }: Props) => {
     )
 }
 
-export default CodeRefrence
+export default CodeReferences

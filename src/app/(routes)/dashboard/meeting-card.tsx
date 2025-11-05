@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Card } from '@/components/ui/card';
 import { useDropzone } from 'react-dropzone';
 import { uploadFile } from '@/lib/supabase';
-import { Loader, Loader2, Presentation, Upload } from 'lucide-react';
+import { Loader2, Presentation, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { api } from '@/trpc/react';

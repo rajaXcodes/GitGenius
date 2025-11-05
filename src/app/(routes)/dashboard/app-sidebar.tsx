@@ -1,5 +1,5 @@
 'use client'
-import { Bot, CirclePlus, CreditCard, LayoutDashboard, Plus, PlusCircleIcon, PlusSquareIcon, Presentation } from "lucide-react"
+import { Bot, CreditCard, LayoutDashboard, Plus, Presentation } from "lucide-react"
 import Link from "next/link"
 import {
     Sidebar,

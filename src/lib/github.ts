@@ -1,15 +1,12 @@
 import { Octokit } from "octokit";
-import type { StackId } from "recharts/types/util/ChartUtils";
 import { db } from "@/server/db";
-import { Filter } from "lucide-react";
-import { headers } from "next/headers";
 import { aiSummariseCommit } from "./gemini";
 import axios from 'axios'
 export const octokit = new Octokit({
     auth: process.env.GITHUB_TOKEN
 });
 
-const githubUrl = 'https://github.com/docker/genai-stack'
+// const githubUrl = 'https://github.com/docker/genai-stack'
 
 type Response = {
     commitHash: string;
@@ -52,12 +49,24 @@ export const pollsCommits = async (projectId: string) => {
         const summaryResponses = await Promise.allSettled(unprocessCommits.map(commit => {
             return summariseCommit(githubUrl, commit.commitHash);
         }))
-        const summaries = summaryResponses.map((response) => {
+        const summaries = summaryResponses.map((response, index) => {
             if (response.status === 'fulfilled') {
                 return response.value as string;
+            } else {
+                console.error(`❌ Failed to summarize commit ${index} (${unprocessCommits[index]?.commitHash}):`, {
+                    reason: response.reason,
+                    message: response.reason?.message,
+                    code: response.reason?.code,
+                    status: response.reason?.status
+                });
+                return "";
             }
-            return "";
         })
+
+        console.log(`✅ Successfully summarized: ${summaries.filter(s => s != "").length}/${summaries.length}`);
+
+
+
         const commit = await db.commit.createMany({
             data: summaries.map((summary, index) => {
                 console.log(`Processing commit ${index}`);

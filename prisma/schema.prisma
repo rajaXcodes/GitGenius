@@ -55,8 +55,8 @@ model UserToProject {
     userId    String
     projectId String
 
-    user    User    @relation(fields: [userId], references: [id])
-    project Project @relation(fields: [projectId], references: [id])
+    user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
     @@unique([userId, projectId])
 }
@@ -67,7 +67,7 @@ model Commit {
     updatedAt DateTime @updatedAt
 
     projectId String
-    project   Project @relation(fields: [projectId], references: [id])
+    project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
     commitMessage      String
     commitHash         String
@@ -101,10 +101,10 @@ model Question {
     filesReferences Json?
 
     projectId String
-    project   Project @relation(fields: [projectId], references: [id])
+    project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
     userId String
-    user   User   @relation(fields: [userId], references: [id])
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Issue {
