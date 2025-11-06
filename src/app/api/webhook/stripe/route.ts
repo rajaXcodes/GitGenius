@@ -37,9 +37,7 @@ export async function POST(request: NextRequest) {
                 }
             }
         })
-        toast.success(`${credits} credits are added successfully`)
         return NextResponse.json({ message: 'Credits added successfully' }, { status: 200 })
     }
-    toast.error(`Payment Failed`);
     return NextResponse.json({ message: 'Failed to add token' }, { status: 403 })
 }
