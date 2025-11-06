@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     console.log(event.type);
 
 
-    if (event.type === 'checkout.session.completed') {
+    if (event.type === 'checkout.session.completed' || event.type === 'payment_intent.succeeded') {
         const credits = Number(session.metadata?.['credits'])
         const userId = session.client_reference_id;
         if (!userId || !credits) {
