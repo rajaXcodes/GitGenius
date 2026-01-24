@@ -1,5 +1,5 @@
 
-# 🚀 Git-Genius  
+# 🚀 GitGenius  
 *Your AI-powered GitHub Repository Analyzer*  
 
 ---
