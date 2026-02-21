@@ -91,7 +91,7 @@ export default function Home() {
       <section className="px-6 py-20 lg:px-8" id="features">
         <div className="mx-auto max-w-7xl">
           <div className="text-center mb-16 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-5xl mb-4">
+            <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100 sm:text-5xl mb-4" id="feature">
               Powerful Features
             </h2>
             <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
@@ -309,11 +309,18 @@ export default function Home() {
             Join developers who are already using GitGenius to work smarter, not harder.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-300">
-            <Button size="lg" className="text-base px-8 py-6 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200">
-              Start Free Trial <ChevronRight className="ml-2 h-5 w-5" />
+            <Button size="lg" className="text-base px-8 py-6 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 hover:cursor-pointer" onClick={() => {
+              if (isSignedIn) {
+                redirect('dashboard');
+              }
+              else {
+                openSignIn();
+              }
+            }}>
+              {isSignedIn ? "Dashboard" : "Start Free Trial"} <ChevronRight className="ml-2 h-5 w-5" />
             </Button>
             <Button size="lg" variant="outline" className="text-base px-8 py-6">
-              Schedule Demo
+              <a href="#feature">Learn More</a>
             </Button>
           </div>
 

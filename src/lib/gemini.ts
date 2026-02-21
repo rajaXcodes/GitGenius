@@ -1,4 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
+import { GithubRepoLoader } from "@langchain/community/document_loaders/web/github";
 import { Document } from "@langchain/core/documents";
 
 const ai = new GoogleGenAI({

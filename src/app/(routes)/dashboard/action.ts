@@ -74,3 +74,10 @@ export async function askQuestion(question: string, projectId: string) {
         fileRefernces: result
     }
 }
+
+
+// link -> GithubRepoLoader + oktokit(further details commits ) + files summary db + commits summary rakhl db +  embedding 
+
+// commits summary 
+
+// qna -> que vector embedding 
