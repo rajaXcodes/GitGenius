@@ -4,7 +4,7 @@
  */
 import "./src/env.js";
 
-/** @type {import("next").NextConfig} */
+/** @type {import("next").NextConfig & Record<string, unknown>} */
 const config = {
     eslint: {
         ignoreDuringBuilds: true
