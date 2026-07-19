@@ -82,14 +82,17 @@ export const checkCredits = async (repoUrl: string, githubToken?: string) => {
     const docs = await loadGithubRepo(repoUrl, githubToken);
     return docs.length; // just return number of files
 };
+
 // [Document {
 //     pageContent: "import { StrictMode } from 'react'\nimport { createRoot } from 'react-dom/client'\nimport './index.css'\nimport App from './App.tsx'\n\ncreateRoot(document.getElementById('root')!).render(\n  <StrictMode>\n    <App />\n  </StrictMode>,\n)\n",
 //     metadata: {
-//       source: "src/main.tsx",
-//       repository: "https://github.com/rajaXcodes/interview_frontend",
-//       branch: "main",
+//         source: "src/main.tsx",
+//         repository: "https://github.com/rajaXcodes/interview_frontend",
+//         branch: "main",
 //     },
 //     id: undefined,
-//   }]
+// }]
 
 // console.log(await LoadGithubRepo('https://github.com/rajaXcodes/interview_frontend'));
+
+

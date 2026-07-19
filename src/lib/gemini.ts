@@ -1,5 +1,4 @@
 import { GoogleGenAI } from "@google/genai";
-import { GithubRepoLoader } from "@langchain/community/document_loaders/web/github";
 import { Document } from "@langchain/core/documents";
 
 const ai = new GoogleGenAI({
@@ -29,67 +28,72 @@ const basePrompt = "You are an expert software engineer and technical documentat
     "- Use markdown (`**bold**, lists`).\n" +
     "- Do not echo the raw diff.\n\n";
 
-
-
 export const aiSummariseCommit = async (diff: string) => {
-    // Compose the full prompt dynamically with the diff
     const fullPrompt = `${basePrompt}\n\nNow, here is the diff:\n\n${diff}`;
 
     const response = await ai.models.generateContent({
-        model: "gemini-2.0-flash-exp",
-        contents: [{ role: "user", parts: [{ text: fullPrompt }] }],
+        model: "gemini-3.5-flash",
+        contents: fullPrompt,
         config: {
             temperature: 0.2,
             systemInstruction:
                 "You are an expert developer assistant. Write a well-structured summary of this git diff using markdown.",
+            thinkingConfig: {
+                thinkingBudget: 0
+            }
         },
     });
 
-    const output = response.text || "No summary generated.";
-    return output;
+    return response.text || "No summary generated.";
 };
 
 export async function summariseCode(doc: Document) {
-    console.log("getting summary for", doc.metadata.source);
+    console.log("Getting summary for:", doc.metadata.source);
+
     const code = doc.pageContent.slice(0, 10000);
     const fileName = doc.metadata.fileName;
+
     const systemInstruction =
         "You are an intelligent senior software engineer who specializes in onboarding junior developers. " +
         "Your goal is to explain the provided code's purpose and functionality in a friendly, " +
         "encouraging, and highly professional manner. You must write a well-structured summary using Markdown.";
 
-    // 3. Define the User Query (Context and Data)
-    // Using backticks (`) for template literals to correctly inject variables.
     const userQuery = `
-                Please provide an explanation for the file: **${fileName}**.
+        Please provide an explanation for the file: **${fileName}**.
 
-                Focus on the core purpose, main functions, and any important implementation details relevant to a new team member.
+        Focus on the core purpose, main functions, and any important implementation details relevant to a new team member.
 
-                --- CODE START ---
-                ${code}
-                --- CODE END ---
-            `;
+        --- CODE START ---
+        ${code}
+        --- CODE END ---
+    `;
+
     try {
         const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
-            contents: [{ role: "user", parts: [{ text: userQuery }] }],
-            config: {
-                systemInstruction
-            },
+            model: "gemini-3.5-flash", // Updated to current stable version
+            contents: userQuery,       // Clean string syntax mapping
+            config: { systemInstruction },
         });
-        if (!response.text) throw new Error("Cannot generate Code summary");
 
+        if (!response.text) throw new Error("Cannot generate Code summary");
         return response.text;
     } catch (error) {
+        console.error("Code summarization error:", error);
         return ' ';
     }
-
 }
 export async function generateEmbedding(summary: string) {
-    const response = await ai.models.embedContent({
-        model: 'text-embedding-004',
-        contents: summary
-    });
+    try {
+        const response = await ai.models.embedContent({
+            model: 'gemini-embedding-001',
+            contents: summary
+        });
 
-    return response.embeddings![0]?.values || [];
+        // Supports extracting regardless of single or array structured returns
+        const res = response.embeddings?.[0]?.values || [];
+        return res;
+    } catch (error) {
+        console.error("Embedding generation failed:", error);
+        return [];
+    }
 }

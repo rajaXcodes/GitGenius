@@ -11,8 +11,9 @@ const google = createGoogleGenerativeAI({
 
 export async function askQuestion(question: string, projectId: string) {
     const stream = await createStreamableValue()
-    const queryVector = await generateEmbedding(question)
-    const vectorQuery = `[${queryVector.join(",")}]`
+    const queryVector = await generateEmbedding(question);
+    console.log(queryVector);
+    const vectorQuery = `[${queryVector!.join(",")}]`
 
     // Log the vector query for debugging
     // console.log("Vector Query:", vectorQuery)
@@ -41,7 +42,7 @@ export async function askQuestion(question: string, projectId: string) {
     // console.log("context", context);
     (async () => {
         const { textStream } = await streamText({
-            model: google('gemini-2.0-flash'),
+            model: google('gemini-3.5-flash'),
             prompt: `
             You are a AI code assistant who answers questions about the codebase. Your target  audience  is a technical intern who is new to the codebase.
              AI assistant is a brand new, powerful, human-like artificial intelligence.
