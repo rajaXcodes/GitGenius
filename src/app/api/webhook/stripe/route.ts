@@ -2,7 +2,6 @@ import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { db } from "@/server/db";
-import { toast } from "sonner";
 const stripe = new Stripe(process.env.STRIPE_API_KEY!, { apiVersion: '2025-10-29.clover' });
 
 export async function POST(request: NextRequest) {
